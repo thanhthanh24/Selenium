@@ -8,7 +8,8 @@ public class MainDemoQA {
     public void test() throws InterruptedException {
         POM pom = new POM();
         pom.openDemoQA();
-        pom.clickElement();
+        pom.clickElement("Elements");
+        //pom.clickElement();
         pom.clickWebTables();
         pom.clickBTNAdd();
         pom.inputRegistrationForm("Thanhhhh", "Tran", "thanh123@gmail.com", "18", "1000000", "HN");

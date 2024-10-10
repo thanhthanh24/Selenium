@@ -1,5 +1,6 @@
 package POM.DemoQA.com;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,7 +20,7 @@ public class POM {
 
     @FindBy(xpath = "//div[@class='card-body']/h5[text()='Elements']")
     private WebElement txtElement;
-    // private static final String itemMenu = "//div[@class='card-body']/h5[text()='%s";
+     private static final String itemMenu = "//div[@class='card-body']//h5[text()='%s']";
 
 
     @FindBy(xpath = "//span[@class='text'and text() ='Web Tables']")
@@ -67,9 +68,10 @@ public class POM {
     }
 
     //Bước 2:  Click tab Elements
-    public void clickElement() {
-        txtElement.click();
-        // WebElement element = webDriver.findElement(By.xpath(itemMenu.formatted(menuNameElements)));
+    public void clickElement(String menuname) {
+       // txtElement.click();
+         WebElement element = webDriver.findElement(By.xpath(itemMenu.formatted(menuname)));
+        element.click();
     }
 
     //Bước 3:  Click tab Web Tables
