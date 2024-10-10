@@ -15,6 +15,7 @@ public class MainDemoQA {
         pom.inputRegistrationForm("Thanhhhh", "Tran", "thanh123@gmail.com", "18", "1000000", "HN");
         pom.editUser("Tui Là Thanh nè");
         Thread.sleep(2000);
-        pom.deleteUser();
+        pom.deleteUser("Thanhhhh", "Tran", "thanh123@gmail.com");
+        pom.closeBrower();
     }
 }

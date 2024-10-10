@@ -13,7 +13,5 @@ Y
 )src/test/java/thanhtester/com/TestNG.java,b\1\b1393c18a828b81f8d3aad751e92ad65d2e1c9f7
 \
 ,src/test/java/thanhtester/com/TestLogin.java,b\6\b640268beca5a4ee7bddc1e2bc369703e30390cc
-[
-+src/test/java/pageOjectModel/com/Login.java,4\9\49f9bcc957d851c200747387076a849e967e1c28
 ]
 -src/test/java/nhasachFaHaSa/com/MainBook.java,3\2\3213ff0fb33dfd855d4c3edb96ccd30a38e3c88c

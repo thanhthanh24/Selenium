@@ -154,9 +154,27 @@ public class POM {
         }
     }
     //Bước 8. Xóa user và verify user đc xóa khỏi bảng
-    public void deleteUser(){
+    public void deleteUser(String expectedFirstName, String expectedLastName, String expectedEmail){
         iconDelete.click();
+        verifyUserInTable(expectedFirstName,expectedLastName,expectedEmail);
 
+    }
+    public void  verifyUserInTable(String expectedFirstName, String expectedLastName, String expectedEmail){
+        String data = table.getText();
+        var rows = data.split("\n");
+        List<String> x = Arrays.asList(rows);
+        List<String> input = new ArrayList<>();
+        input.add((expectedFirstName));
+        input.add(expectedLastName);
+        input.add(expectedEmail);
+        if (!x.containsAll(input)) {
+            System.out.println("Người dùng đã được xóa khỏi bảng.");
+        } else {
+            System.out.println("Người dùng KHÔNG được xóa khỏi bảng.");
+        }
+    }
+    public void closeBrower(){
+        webDriver.quit();
     }
     }
 
