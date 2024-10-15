@@ -15,3 +15,7 @@ Y
 ,src/test/java/thanhtester/com/TestLogin.java,b\6\b640268beca5a4ee7bddc1e2bc369703e30390cc
 ]
 -src/test/java/nhasachFaHaSa/com/MainBook.java,3\2\3213ff0fb33dfd855d4c3edb96ccd30a38e3c88c
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+[
++src/test/java/pageOjectModel/com/Login.java,4\9\49f9bcc957d851c200747387076a849e967e1c28

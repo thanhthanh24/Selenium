@@ -1,5 +1,6 @@
 package POM.DemoQA.com;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class POM {
+public class UserPage {
     private WebDriver webDriver;
 
     //Khai báo biến
@@ -20,16 +21,19 @@ public class POM {
 
     @FindBy(xpath = "//div[@class='card-body']/h5[text()='Elements']")
     private WebElement txtElement;
+
      private static final String itemMenu = "//div[@class='card-body']//h5[text()='%s']";
 
 
-    @FindBy(xpath = "//span[@class='text'and text() ='Web Tables']")
-    private WebElement txtWebTable;
+    //@FindBy(xpath = "//span[@class='text'and text() ='Web Tables']")
+    //private WebElement txtWebTable;
+
+    private static final String itemElements = "//span[@class='text'and text() ='%s']";
 
     @FindBy(id = "addNewRecordButton")
     private WebElement btnAdd;
 
-    @FindBy(id = "firstName")
+/*    @FindBy(id = "firstName")
     private WebElement firstName;
     @FindBy(id = "lastName")
     private WebElement lastName;
@@ -40,7 +44,11 @@ public class POM {
     @FindBy(id = "salary")
     private WebElement salary;
     @FindBy(id = "department")
-    private WebElement department;
+    private WebElement department;*/
+
+
+    private static final String itemAdd = "//div[@class='modal-body']//input[@id='%s']";
+
     @FindBy(id = "submit")
     private WebElement btnSubmit;
     //div[@class='rt-resizable-header-content' and text() ='Email']";
@@ -68,15 +76,17 @@ public class POM {
     }
 
     //Bước 2:  Click tab Elements
-    public void clickElement(String menuname) {
+    public void clickElement(String menuName) {
        // txtElement.click();
-         WebElement element = webDriver.findElement(By.xpath(itemMenu.formatted(menuname)));
+         WebElement element = webDriver.findElement(By.xpath(itemMenu.formatted(menuName)));
         element.click();
     }
 
     //Bước 3:  Click tab Web Tables
-    public void clickWebTables() {
-        txtWebTable.click();
+    public void clickWebTables(String menuElements) {
+        //txtWebTable.click();
+        WebElement element = webDriver.findElement(By.xpath(itemElements.formatted(menuElements)));
+        element.click();
     }
 
     //Bước 4: Click btn Add
@@ -86,18 +96,34 @@ public class POM {
 
     //Bước 5 : Add new user
     public void inputRegistrationForm(String inputFirstName, String inputLastName, String inputUserEmail, String inputAge, String inputSalary, String inputDepartment) throws InterruptedException {
-        firstName.sendKeys(inputFirstName);
+        //WebElement element = webDriver.findElement(By.xpath(itemAdd.formatted(inputFirstName)));
+        /*firstName.sendKeys(inputFirstName);
         lastName.sendKeys(inputLastName);
         userEmail.sendKeys(inputUserEmail);
         age.sendKeys(inputAge);
         salary.sendKeys(inputSalary);
-        department.sendKeys(inputDepartment);
+        department.sendKeys(inputDepartment);*/
+        fillInput("firstName",inputFirstName);
+        fillInput("lastName",inputLastName);
+        fillInput("userEmail",inputUserEmail);
+        fillInput("age",inputAge);
+        fillInput("salary",inputSalary);
+        fillInput("department",inputDepartment);
+
+
+
         Thread.sleep(3000);
         btnSubmit.click();
 
         // verifyUser(inputFirstName, inputLastName, inputUserEmail);
         verifyUser2(inputFirstName, inputLastName, inputUserEmail);
 
+    }
+
+    public void fillInput(String idAdd, String value){
+        WebElement element = webDriver.findElement(By.xpath(String.format(itemAdd, idAdd)));
+        element.clear();
+        element.sendKeys(value);
     }
 
     //Bước 6: Verify user in table
@@ -107,12 +133,13 @@ public class POM {
         boolean isUserInTable = lastRowText.contains(expectedFirstName) &&
                 lastRowText.contains(expectedLastName) &&
                 lastRowText.contains(expectedEmail);
-
-        if (isUserInTable) {
+        //chuyển assert
+       /* if (isUserInTable) {
             System.out.println("Người dùng có trong bảng.");
         } else {
             System.out.println("Người dùng KHÔNG có trong bảng.");
-        }
+        }*/
+        Assert.assertTrue("Người dùng KHÔNG có trong bảng.",isUserInTable);
     }
 
     public void verifyUser2(String expectedFirstName, String expectedLastName, String expectedEmail) {
@@ -123,18 +150,20 @@ public class POM {
         input.add(expectedFirstName);
         input.add(expectedLastName);
         input.add(expectedEmail);
-        if (x.containsAll(input)) {
+       /* if (x.containsAll(input)) {
             System.out.println("Người dùng có trong bảng.");
         } else {
             System.out.println("Người dùng KHÔNG có trong bảng.");
-        }
+        }*/
+        Assert.assertTrue("Người dùng KHÔNG có trong bảng.",x.containsAll(input));
     }
 
     //Bước 7 : Edit user vừa thêm và verify thông tin user đc update
     public void editUser(String editFirstName) throws InterruptedException {
         iconEdit.click();
-        firstName.clear();
-        firstName.sendKeys(editFirstName);
+        fillInput("firstName",editFirstName);
+        /*firstName.clear();
+        firstName.sendKeys(editFirstName);*/
         Thread.sleep(3000);
         btnSubmit.click();
 
@@ -147,11 +176,12 @@ public class POM {
 
         boolean isUserInTable = lastRowText.contains(expectedEditFirstName) ;
 
-        if (isUserInTable) {
+        /*if (isUserInTable) {
             System.out.println("Người dùng đã được chỉnh sửa.");
         } else {
             System.out.println("Người dùng KHÔNG được chỉnh sửa.");
-        }
+        }*/
+        Assert.assertTrue("Người dùng KHÔNG được chỉnh sửa.",isUserInTable);
     }
     //Bước 8. Xóa user và verify user đc xóa khỏi bảng
     public void deleteUser(String expectedFirstName, String expectedLastName, String expectedEmail){
@@ -167,16 +197,21 @@ public class POM {
         input.add((expectedFirstName));
         input.add(expectedLastName);
         input.add(expectedEmail);
-        if (!x.containsAll(input)) {
+       /* if (!x.containsAll(input)) {
             System.out.println("Người dùng đã được xóa khỏi bảng.");
         } else {
             System.out.println("Người dùng KHÔNG được xóa khỏi bảng.");
-        }
+        }*/
+        Assert.assertTrue("Người dùng KHÔNG được xóa khỏi bảng.",!x.containsAll(input));
     }
+
+
+
+
     public void closeBrower(){
         webDriver.quit();
     }
-    }
+}
 
 
 
