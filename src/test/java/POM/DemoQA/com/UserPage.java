@@ -1,22 +1,34 @@
 package POM.DemoQA.com;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.swing.*;
+import java.io.StringReader;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.testng.AssertJUnit.assertEquals;
 
 public class UserPage {
     private WebDriver webDriver;
 
     //Khai báo biến
     private static final String urlDemoQA = "https://demoqa.com/";
+
+    private static final String Test1234 = "http://test.rubywatir.com/radios.php";
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div/div[2]/p/input[2]")
+    private WebElement test;
+
 
 
     @FindBy(xpath = "//div[@class='card-body']/h5[text()='Elements']")
@@ -66,14 +78,23 @@ public class UserPage {
     @FindBy(xpath = "(//div[@role='rowgroup']//div[@role='row' and not(contains(@class, '-padRow '))])[last()]//span[contains(@id, 'delete-record')]")
     private WebElement iconDelete;
 
+    @FindBy(xpath = "//input[@id='yesRadio']")
+    private WebElement radioButtonYes;
+
     //Bước 1: truy cập trang demoQA
     public void openDemoQA() {
         webDriver = new ChromeDriver();
         webDriver.manage().window().maximize();
         PageFactory.initElements(webDriver, this);
+        //webDriver.get(Test1234);
         webDriver.get(urlDemoQA);
 
     }
+    public void testRadio() {
+        test.click();
+    }
+
+
 
     //Bước 2:  Click tab Elements
     public void clickElement(String menuName) {
@@ -83,7 +104,7 @@ public class UserPage {
     }
 
     //Bước 3:  Click tab Web Tables
-    public void clickWebTables(String menuElements) {
+    public void clickSubElements(String menuElements) {
         //txtWebTable.click();
         WebElement element = webDriver.findElement(By.xpath(itemElements.formatted(menuElements)));
         element.click();
@@ -93,6 +114,14 @@ public class UserPage {
     public void clickBTNAdd() {
         btnAdd.click();
     }
+
+    //Radio Button
+    public void clíckRadioButtonYes() {
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(radioButtonYes));
+        radioButtonYes.click();
+    }
+
 
     //Bước 5 : Add new user
     public void inputRegistrationForm(String inputFirstName, String inputLastName, String inputUserEmail, String inputAge, String inputSalary, String inputDepartment) throws InterruptedException {
@@ -204,6 +233,104 @@ public class UserPage {
         }*/
         Assert.assertTrue("Người dùng KHÔNG được xóa khỏi bảng.",!x.containsAll(input));
     }
+    public void mouseAndKeyboard(String inputValue) throws InterruptedException {
+         webDriver = new ChromeDriver();
+        webDriver.manage().window().maximize();
+        webDriver.get("https://www.google.com.vn/?hl=vi");
+
+        Actions actions = new Actions(webDriver);
+
+        WebElement inputText = webDriver.findElement(By.xpath("//textarea[@class='gLFyf']"));
+        inputText.click();
+
+        //Nhập giá trị
+        actions.sendKeys(inputValue).perform();
+
+        //Ctrl+A
+        Thread.sleep(2000);
+        inputText.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+
+        //Thực hiện nhấn ENTER
+        Thread.sleep(2000);
+        actions.sendKeys(Keys.ENTER).perform();
+
+        //Click
+        Thread.sleep(2000);
+        WebElement linkDeMoQA = webDriver.findElement(By.xpath("//span[@class='VuuXrf' and text()='DEMOQA']"));
+        actions.click(linkDeMoQA).perform();
+
+        //DoubleClick
+        Thread.sleep(5000);
+        WebElement doubleClick = webDriver.findElement(By.xpath("//div[@class='home-banner']"));
+        actions.doubleClick().perform();
+        Thread.sleep(3000);
+    }
+
+    public void clickMouseRight(){
+        Actions actions = new Actions(webDriver);
+        WebElement mouseRightClick = webDriver.findElement(By.id("rightClickBtn"));
+        actions.contextClick(mouseRightClick).perform();
+
+    }
+
+    //Di chuyển chuột và nhấp chuột
+    public void moveToElement(String menuName){
+        Actions actions = new Actions(webDriver);
+        WebElement menuElement = webDriver.findElement(By.xpath(itemMenu.formatted(menuName)));
+        actions.moveToElement(menuElement).click().perform();
+    }
+    //Kéo và thả
+
+
+    public void alertsConfirm (){
+        WebElement buttonConfirmAction = webDriver.findElement(By.id("confirmButton"));
+        buttonConfirmAction.click();
+    }
+    public void alertsOK(){
+        Alert alert = webDriver.switchTo().alert();
+        //Store the alert text in a variable and verify it
+        String text = alert.getText();
+        assertEquals(text, "Do you confirm action?");
+        //Press the OK button
+        alert.accept();
+        WebElement textOK = webDriver.findElement(By.id("confirmResult"));
+        String resultText = textOK.getText();
+        assertEquals(resultText,"You selected Ok");
+
+    }
+    public void alertsCancel(){
+        Alert alert = webDriver.switchTo().alert();
+        //Store the alert text in a variable and verify it
+        String text = alert.getText();
+        assertEquals(text, "Do you confirm action?");
+        //Press the OK button
+        alert.dismiss();
+        WebElement textOK = webDriver.findElement(By.id("confirmResult"));
+        String resultText = textOK.getText();
+        assertEquals(resultText,"You selected Cancel");
+
+    }
+
+    public void alertsPrompt  (){
+        WebElement buttonConfirmAction = webDriver.findElement(By.id("promtButton"));
+        buttonConfirmAction.click();
+        Alert alert = webDriver.switchTo().alert();
+        //Store the alert text in a variable and verify it
+        String text = alert.getText();
+        assertEquals(text, "Please enter your name");
+        //Type your message
+        String nameInput = "Thanh";
+        alert.sendKeys(nameInput);
+        alert.accept();
+        //Press the OK button
+        WebElement textOK = webDriver.findElement(By.id("promptResult"));
+        String resultText = textOK.getText();
+        assertEquals(resultText,"You entered %s".formatted(nameInput));
+
+    }
+
+
+
 
 
 
